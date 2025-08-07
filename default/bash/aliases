@@ -1,38 +1,196 @@
 # File system
-alias ls='eza -lh --group-directories-first --icons=auto'
-alias lsa='ls -a'
-alias lt='eza --tree --level=2 --long --icons --git'
-alias lta='lt -a'
-alias ff="fzf --preview 'bat --style=numbers --color=always {}'"
-alias cd="zd"
+# alias ls='eza -lh --group-directories-first --icons=auto'
+# alias lsa='ls -a'
+# alias lt='eza --tree --level=2 --long --icons --git'
+# alias lta='lt -a'
+# alias ff="fzf --preview 'bat --style=numbers --color=always {}'"
+# alias cd="zd"
 zd() {
-  if [ $# -eq 0 ]; then
-    builtin cd ~ && return
-  elif [ -d "$1" ]; then
-    builtin cd "$1"
-  else
-    z "$@" && printf " \U000F17A9 " && pwd || echo "Error: Directory not found"
-  fi
+    if [ $# -eq 0 ]; then
+        builtin cd ~ && return
+        elif [ -d "$1" ]; then
+        builtin cd "$1"
+    else
+        z "$@" && printf " \U000F17A9 " && pwd || echo "Error: Directory not found"
+    fi
 }
 open() {
-  xdg-open "$@" >/dev/null 2>&1 &
+    xdg-open "$@" >/dev/null 2>&1 &
 }
 
-# Directories
-alias ..='cd ..'
-alias ...='cd ../..'
-alias ....='cd ../../..'
+# # Directories
+# alias ..='cd ..'
+# alias ...='cd ../..'
+# alias ....='cd ../../..'
 
-# Tools
-alias n='nvim'
-alias g='git'
-alias d='docker'
-alias r='rails'
+# # Tools
+# alias n='nvim'
+# alias g='git'
+# alias d='docker'
+# alias r='rails'
 
-# Git
-alias gcm='git commit -m'
-alias gcam='git commit -a -m'
-alias gcad='git commit -a --amend'
+# # Git
+# alias gcm='git commit -m'
+# alias gcam='git commit -a -m'
+# alias gcad='git commit -a --amend'
 
 # Find packages without leaving the terminal
 alias yayf="yay -Slq | fzf --multi --preview 'yay -Sii {1}' --preview-window=down:75% | xargs -ro yay -S"
+
+# ALIASES
+
+# -----------------------------------------------------
+# General
+# -----------------------------------------------------
+alias c='clear'
+alias nf='fastfetch'
+alias pf='fastfetch'
+alias ff='fastfetch'
+alias ls='eza -a --icons=always'
+alias ll='eza -al --icons=always'
+alias lt='eza -a --tree --level=1 --icons=always'
+alias shutdown='systemctl poweroff'
+alias v='$EDITOR'
+alias vim='$EDITOR'
+# alias ts='~/.config/ml4w/scripts/arch/snapshot.sh'
+alias wifi='nmtui'
+# alias cleanup='~/.config/ml4w/scripts/cleanup.sh'
+alias omarchy='code ~/.local/share/omarchy/default/hypr/'
+# -----------------------------------------------------
+# -----------------------------------------------------
+# Git
+# -----------------------------------------------------
+alias gs="git status"
+alias ga="git add"
+alias gc="git commit -m"
+alias gp="git push"
+alias gpl="git pull"
+alias gst="git stash"
+alias gsp="git stash; git pull"
+alias gfo="git fetch origin"
+alias gcheck="git checkout"
+alias gcredential="git config credential.helper store"
+
+# -----------------------------------------------------
+# Scripts
+# -----------------------------------------------------
+alias ascii='~/.config/ml4w/scripts/figlet.sh'
+
+# -----------------------------------------------------
+# System
+# -----------------------------------------------------
+alias update-grub='sudo grub-mkconfig -o /boot/grub/grub.cfg'
+
+alias c='clear'
+alias ff='fastfetch'
+alias n='nvim'
+alias audio='pavucontrol'
+alias blueman='blueman-manager'
+alias hyprr='hyprctl reload'
+
+alias ls='eza -a --icons=always'
+alias ll='eza -al --icons=always'
+alias lt='eza -a --tree --level=1 --icons=always'
+alias shutdown='systemctl poweroff'
+alias v='$EDITOR'
+alias vim='$EDITOR'
+alias ts='~/.config/ml4w/scripts/snapshot.sh'
+alias wifi='nmtui'
+alias cleanup='~/.config/ml4w/scripts/cleanup.sh'
+alias tmute='~/.config/hypr/scripts/toggle-mic'
+
+# Launching Apps --------------------------------------
+alias calculator='~/.config/ml4w/settings/calculator.sh'
+alias chromium='chromium --ozone-platform=wayland'
+
+
+# Navigation Shortcuts
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias dl='cd ~/Downloads'
+alias videos='cd ~/Videos'
+alias music='cd ~/Music'
+alias docs='cd ~/Documents'
+alias conf='cd ~/.config'
+alias hypr='cd ~/.config/hypr'
+alias bar='cd ~/.config/waybar'
+
+
+# -----------------------------------------------------
+
+# Arch
+alias update="sudo pacman -Syu"
+alias remove="sudo pacman -Rns"
+alias search="pacman -Ss"
+alias install="sudo pacman -S"
+alias cleanup="sudo pacman -Rns $(pacman -Qdtq)"
+
+
+#  Cleanup & Maintenance
+alias orphans='pacman -Qdt'                             # List orphans
+alias clear-cache='sudo pacman -Scc'                    # Aggressively clear cache
+
+#  Development & Tools
+alias serve='python -m http.server'                     # Simple HTTP server
+alias ports='sudo lsof -i -P -n | grep LISTEN'          # Show listening ports
+alias dev='cd ~/Projects'                               # Dev folder shortcut
+alias editbash='nano ~/.bashrc'                         # Edit bash config
+alias editbashalias='nvim /home/ihza/.config/fish/config.fish'
+alias srcbash='source ~/.bashrc'                        # Reload bash config
+
+
+# Wayland/Hyprland Specific
+alias hyprr='hyprctl reload'                         # Reload Hyprland
+alias hyprl='journalctl -xe | grep Hyprland'            # View Hyprland logs
+alias copy='wl-copy <'                                # Copy to clipboard
+alias paste='wl-paste'                                # Paste from clipboard
+
+
+#  Aesthetic & System Tools
+alias theme='nwg-look'                              # GTK theme chooser
+alias icons='qt5ct'                                     # QT theme chooser
+alias fonts='fc-list | grep'                            # Search installed fonts
+
+# VLC
+alias playmovies='vlc ~/Videos/Movies'
+alias vlc='QT_QPA_PLATFORM=wayland vlc'
+
+
+# LOCK SCREEN
+alias lock='hyprlock'
+
+# Toggle DOCK
+alias dock='~/.config/hypr/scripts/toggle-dock.sh'
+
+# dummy notif
+alias notiftest='notify-send "Dummy" "Notifikasi test"; notify-send -u critical -t 5000 -i dialog-error "Critical" "Ini notifikasi critical"'
+
+#cloudflare
+alias vpnon='warp-cli connect'
+alias vpnoff='warp-cli disconnect'
+alias vpn='warp-cli status'
+
+
+#power-profile
+alias balance='powerprofilesctl set balanced'
+alias low='powerprofilesctl set power-saver'
+alias performance='powerprofilesctl set performance'
+alias getmode='powerprofilesctl get'
+
+
+#check active window class
+alias checkclass='hyprctl clients | grep "class: "'
+
+
+alias open='thunar .'
+
+alias resbluetooth='sudo systemctl restart bluetooth.service'
+
+alias lockhyprlock='sudo chattr +i /home/ihza/.config/hypr/hyprlock.conf'
+
+alias unlockhyprlock='sudo chattr -i /home/ihza/.config/hypr/hyprlock.conf'
+
+alias warmup='wlsunset -t 4000 -T 6500 -l -6.2 -L 106.8'
+
+alias coolup='pkill wlsunset'
