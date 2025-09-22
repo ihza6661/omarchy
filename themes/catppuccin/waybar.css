@@ -1,2 +1,30 @@
 @define-color foreground #cdd6f4;
 @define-color background #181824;
+
+/* #custom-exit { */
+/*   color: #45475a; */
+/* } */
+
+#workspaces button.active label {
+    color: #eba0ac;
+}
+
+#network {
+  color: #89b4fa;
+}
+
+#clock {
+  color: #b4befe;
+}
+
+#bluetooth.connected {
+    color: #89dceb;
+}
+
+#custom-expand-icon {
+  color: #f9e2af;
+}
+
+#battery {
+  color: #b4befe;
+}

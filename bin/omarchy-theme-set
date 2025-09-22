@@ -7,6 +7,8 @@ fi
 
 THEMES_DIR="$HOME/.config/omarchy/themes/"
 CURRENT_THEME_DIR="$HOME/.config/omarchy/current/theme"
+GTK4_CONFIG_DIR="$HOME/.config/gtk-4.0"
+GTK4_SETTINGS_FILE="$GTK4_CONFIG_DIR/settings.ini"
 
 THEME_NAME=$(echo "$1" | sed -E 's/<[^>]+>//g' | tr '[:upper:]' '[:lower:]' | tr ' ' '-')
 THEME_PATH="$THEMES_DIR/$THEME_NAME"
@@ -20,8 +22,66 @@ fi
 # Update theme symlinks
 ln -nsf "$THEME_PATH" "$CURRENT_THEME_DIR"
 
+<<<<<<< Updated upstream
 # Change background with theme
 omarchy-theme-bg-next
+=======
+# Change gnome modes
+if [[ -f ~/.config/omarchy/current/theme/light.mode ]]; then
+  gsettings set org.gnome.desktop.interface color-scheme "prefer-light"
+  gsettings set org.gnome.desktop.interface gtk-theme "Graphite-Light-compact-nord"
+else
+  gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"
+  if [[ "$THEME_NAME" == "dracula" ]]; then
+    gsettings set org.gnome.desktop.interface gtk-theme "Dracula"
+  elif [[ "$THEME_NAME" == "catppuccin" ]]; then
+    gsettings set org.gnome.desktop.interface gtk-theme "Catppuccin-Grey-Dark"
+  elif [[ "$THEME_NAME" == "archriot" ]]; then
+    gsettings set org.gnome.desktop.interface gtk-theme "Tokyonight-Dark"
+  elif [[ "$THEME_NAME" == "everforest" ]]; then
+    gsettings set org.gnome.desktop.interface gtk-theme "Everforest-Grey-Dark"
+  elif [[ "$THEME_NAME" == "nord" ]]; then
+    gsettings set org.gnome.desktop.interface gtk-theme "Nordic"
+  elif [[ "$THEME_NAME" == "aura" ]]; then
+    gsettings set org.gnome.desktop.interface gtk-theme "Tokyonight-Dark-Moon"
+  elif [[ "$THEME_NAME" == "gruvbox" ]]; then
+    gsettings set org.gnome.desktop.interface gtk-theme "Gruvbox-Grey-Dark"
+  elif [[ "$THEME_NAME" == "tokyo-night" ]]; then
+    gsettings set org.gnome.desktop.interface gtk-theme "Tokyonight-Dark-Moon"
+  elif [[ "$THEME_NAME" == "futurism" ]]; then
+    gsettings set org.gnome.desktop.interface gtk-theme "materia-cyberpunk-neon"
+
+  else
+    gsettings set org.gnome.desktop.interface gtk-theme "Graphite-Dark"
+  fi
+fi
+
+# Change gnome icon theme color
+if [[ -f ~/.config/omarchy/current/theme/icons.theme ]]; then
+  gsettings set org.gnome.desktop.interface icon-theme "$(<~/.config/omarchy/current/theme/icons.theme)"
+else
+  gsettings set org.gnome.desktop.interface icon-theme "Nordic-darker"
+fi
+
+# Change Chromium colors
+if command -v chromium &>/dev/null; then
+  if [[ -f ~/.config/omarchy/current/theme/light.mode ]]; then
+    chromium --no-startup-window --set-color-scheme="light"
+  else
+    chromium --no-startup-window --set-color-scheme="dark"
+  fi
+
+  if [[ -f ~/.config/omarchy/current/theme/chromium.theme ]]; then
+    chromium --no-startup-window --set-theme-color="$(<~/.config/omarchy/current/theme/chromium.theme)"
+  else
+    # Use a default, neutral grey if theme doesn't have a color
+    chromium --no-startup-window --set-theme-color="28,32,39"
+  fi
+fi
+
+# Trigger alacritty config reload
+touch "$HOME/.config/alacritty/alacritty.toml"
+>>>>>>> Stashed changes
 
 # Restart components to apply new theme
 omarchy-restart-waybar
