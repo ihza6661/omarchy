@@ -22,10 +22,8 @@ fi
 # Update theme symlinks
 ln -nsf "$THEME_PATH" "$CURRENT_THEME_DIR"
 
-<<<<<<< Updated upstream
 # Change background with theme
 omarchy-theme-bg-next
-=======
 # Change gnome modes
 if [[ -f ~/.config/omarchy/current/theme/light.mode ]]; then
   gsettings set org.gnome.desktop.interface color-scheme "prefer-light"
@@ -81,7 +79,6 @@ fi
 
 # Trigger alacritty config reload
 touch "$HOME/.config/alacritty/alacritty.toml"
->>>>>>> Stashed changes
 
 # Restart components to apply new theme
 omarchy-restart-waybar
