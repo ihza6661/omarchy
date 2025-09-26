@@ -1,26 +1,74 @@
 #!/bin/bash
 
 VS_CODE_THEME="$HOME/.config/omarchy/current/theme/vscode.json"
-VS_CODE_SETTINGS="$HOME/.config/Code/User/settings.json"
+VS_CODE_SETTINGS="$HOME/.config/Code - OSS/User/settings.json"
 VS_CODE_SKIP_FLAG="$HOME/.local/state/omarchy/toggles/skip-vscode-theme-changes"
 
-if omarchy-cmd-present code && [[ ! -f "$VS_CODE_SKIP_FLAG" ]]; then
+CODE_BIN="code-oss"
+
+if command -v "$CODE_BIN" >/dev/null 2>&1 && [[ ! -f "$VS_CODE_SKIP_FLAG" ]]; then
   if [[ -f "$VS_CODE_THEME" ]]; then
     theme_name=$(jq -r '.name' "$VS_CODE_THEME")
     extension=$(jq -r '.extension' "$VS_CODE_THEME")
 
-    # Install VS Code theme extension
-    if [[ -n "$extension" ]] && ! code --list-extensions | grep -Fxq "$extension"; then
+    # Install theme extension if missing
+    if [[ -n "$extension" ]] && ! "$CODE_BIN" --list-extensions | grep -Fxq "$extension"; then
       notify-send "   Installing VS Code theme for $theme_name"
-      code --install-extension "$extension" >/dev/null
+      "$CODE_BIN" --install-extension "$extension" >/dev/null
     fi
 
-    # Update theme in settings.json
-    jq -n --arg t "$theme_name" '(input? // {}) | .["workbench.colorTheme"] = $t' "$VS_CODE_SETTINGS" >"${VS_CODE_SETTINGS}.new"
-  else
-    # Remove theme from settings.json when the theme doesn't have vscode support
-    jq 'del(.["workbench.colorTheme"])' "$VS_CODE_SETTINGS" >"${VS_CODE_SETTINGS}.new"
-  fi
+    # Clean settings.json (remove comments + trailing commas)
+    clean_settings=$(mktemp)
+    sed 's@//.*@@' "$VS_CODE_SETTINGS" \
+      | sed 's/,\s*}/}/' > "$clean_settings"
 
-  mv "${VS_CODE_SETTINGS}.new" "$VS_CODE_SETTINGS"
+    # Update only the theme key
+    jq --arg t "$theme_name" '.["workbench.colorTheme"] = $t' \
+       "$clean_settings" > "${VS_CODE_SETTINGS}.new" \
+       && mv "${VS_CODE_SETTINGS}.new" "$VS_CODE_SETTINGS"
+
+    rm -f "$clean_settings"
+  else
+    # Remove theme key if theme doesn’t support VS Code
+    clean_settings=$(mktemp)
+    sed 's@//.*@@' "$VS_CODE_SETTINGS" \
+      | sed 's/,\s*}/}/' > "$clean_settings"
+
+    jq 'del(.["workbench.colorTheme"])' \
+       "$clean_settings" > "${VS_CODE_SETTINGS}.new" \
+       && mv "${VS_CODE_SETTINGS}.new" "$VS_CODE_SETTINGS"
+
+    rm -f "$clean_settings"
+  fi
 fi
+
+
+
+# #!/bin/bash
+
+# VS_CODE_THEME="$HOME/.config/omarchy/current/theme/vscode.json"
+# VS_CODE_SETTINGS="$HOME/.config/Code - OSS/User/settings.json"
+# VS_CODE_SKIP_FLAG="$HOME/.local/state/omarchy/toggles/skip-vscode-theme-changes"
+
+# if omarchy-cmd-present code && [[ ! -f "$VS_CODE_SKIP_FLAG" ]]; then
+#   if [[ -f "$VS_CODE_THEME" ]]; then
+#     theme_name=$(jq -r '.name' "$VS_CODE_THEME")
+#     extension=$(jq -r '.extension' "$VS_CODE_THEME")
+
+#     # Install VS Code theme extension
+#     if [[ -n "$extension" ]] && ! code --list-extensions | grep -Fxq "$extension"; then
+#       notify-send "   Installing VS Code theme for $theme_name"
+#       code --install-extension "$extension" >/dev/null
+#     fi
+
+#     # Update theme in settings.json
+#     jq -n --arg t "$theme_name" '(input? // {}) | .["workbench.colorTheme"] = $t' "$VS_CODE_SETTINGS" >"${VS_CODE_SETTINGS}.new"
+#   else
+#     # Remove theme from settings.json when the theme doesn't have vscode support
+#     jq 'del(.["workbench.colorTheme"])' "$VS_CODE_SETTINGS" >"${VS_CODE_SETTINGS}.new"
+#   fi
+
+#   mv "${VS_CODE_SETTINGS}.new" "$VS_CODE_SETTINGS"
+# fi
+
+
