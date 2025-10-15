@@ -39,4 +39,4 @@ omarchy-theme-set-browser
 omarchy-theme-set-vscode "$THEME_NAME"
 
 # Trigger Matugen color generation and GTK/Qt reload
-"$HOME/.config/omarchy/scripts/set-theme.sh"
+"$HOME/.config/hypr/scripts/set-theme.sh"
