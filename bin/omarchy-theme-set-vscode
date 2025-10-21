@@ -5,7 +5,7 @@
 
 # Parameters: EDITOR_CMD SETTINGS_PATH SKIP_FLAG EDITOR_NAME
 EDITOR_CMD="${1:-code}"
-SETTINGS_PATH="${2:-$HOME/.config/Code/User/settings.json}"
+SETTINGS_PATH="${2:-$HOME/.config/Code - OSS/User/settings.json}"
 SKIP_FLAG="${3:-$HOME/.local/state/omarchy/toggles/skip-vscode-theme-changes}"
 EDITOR_NAME="${4:-VS Code}"
 
